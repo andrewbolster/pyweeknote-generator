@@ -12,7 +12,10 @@ config_keys = {'twitter_list': 'members',
                'jira_baseurl': 'https://jira.farsetlabs.org.uk',
                'weeknotes_str':'weeknotes',
                'google_calendar_id': 'farsetlabs.org.uk_srmqnkn373auq51u00s2nijrq8@group.calendar.google.com',
-               'google_calendar_lookahead': 14}
+               'google_calendar_lookahead': 14,
+               'wordpress_baseurl': 'https://blog.farsetlabs.org.uk/wordpress/',
+               'wordpress_categories': ['News', 'Weeknotes'],
+               'wordpress_tags':['weeknotes','automated']}
 
 text_fields = {
                'intro': "Each week we'll endeavour to publish some details of the interesting things that members have been up to over the past seven days.",

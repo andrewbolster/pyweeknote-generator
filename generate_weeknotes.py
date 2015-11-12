@@ -25,14 +25,13 @@ from datetime import date
 
 import basic_config
 #import secure_config
-#import blog_builder
+from post_to_wordpress import build_draft_post
 
 def prettify_html(html):
     return bs(html).prettify()
 
 
 def generate_weeknotes():
-    header = "<div id='weeknotes'><h1>Weeknotes {}-{}</h1>".format(*date.today().isocalendar()[0:2])
     intro = basic_config.text_fields['intro']
 
     weeknotes = "".encode("utf-8")
@@ -48,7 +47,7 @@ def generate_weeknotes():
 
     footer = basic_config.text_fields['footer']
 
-    content_l = [header, intro, weeknotes, footer]
+    content_l = [intro, weeknotes, footer]
     content = u'\n'.join(content_l)
 
     weeknotes = prettify_html(content)
@@ -56,7 +55,14 @@ def generate_weeknotes():
     return weeknotes
 
 if __name__ == "__main__":
-    print generate_weeknotes()
+    title = "Weeknotes {}-{}:CHANGEME".format(*date.today().isocalendar()[0:2])
+    content = generate_weeknotes()
+    post = build_draft_post(title, content)
+    post_edit_url = "{baseurl}/wp-admin/post.php?post={id}&action=edit".format(
+            baseurl = basic_config.config_keys['wordpress_baseurl'],
+            id = post.id
+    )
+    print("If everything has gone well, an editor should be able to update and publish this weeknote at: {}".format(post_edit_url))
 
 
 
