@@ -12,8 +12,9 @@ Pythonic ish Version of the DoES Liverpool-based Weeknotes generator (for Farset
 Includes:
     Twitter #weeknotes hashtag
     Public JIRA tasks opened or marked as complete this week
-Pending:
     Calendar Integration
+Pending:
+    Wordpress Integration
     Instagram Integration?
     Facebook Integration?
     Slack Integration?
@@ -24,8 +25,6 @@ from datetime import date
 
 import basic_config
 #import secure_config
-import tweet_notes
-import jira_notes
 #import blog_builder
 
 def prettify_html(html):
@@ -35,17 +34,25 @@ def prettify_html(html):
 def generate_weeknotes():
     header = "<div id='weeknotes'><h1>Weeknotes {}-{}</h1>".format(*date.today().isocalendar()[0:2])
     intro = basic_config.text_fields['intro']
-    
-    tweets = tweet_notes.html_weeknotes()
-    jira = jira_notes.html_weeknotes()
 
-    footer = basic_config.text_fields['footer'] 
+    weeknotes = "".encode("utf-8")
+    for module_name in basic_config.modules:
+        try:
+            module = __import__(module_name)
+            weeknotes += module.html_weeknotes()
+        except ImportError:
+            print("Could not import {}; skipping".format(module_name))
+        except:
+            print("Exception in {}".format(module_name))
+            raise
 
-    content_l = [header, intro, tweets, jira, footer]
+    footer = basic_config.text_fields['footer']
+
+    content_l = [header, intro, weeknotes, footer]
     content = u'\n'.join(content_l)
 
     weeknotes = prettify_html(content)
-    
+
     return weeknotes
 
 if __name__ == "__main__":
