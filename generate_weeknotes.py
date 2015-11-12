@@ -31,32 +31,40 @@ def prettify_html(html):
     return bs(html).prettify()
 
 
-def generate_weeknotes():
+def generate_weeknotes(for_wordpress=False):
     intro = basic_config.text_fields['intro']
 
-    weeknotes = "".encode("utf-8")
+    weeknotes_l = []
     for module_name in basic_config.modules:
         try:
             module = __import__(module_name)
-            weeknotes += module.html_weeknotes()
+            weeknotes_l.append(module.html_weeknotes())
         except ImportError:
             print("Could not import {}; skipping".format(module_name))
         except:
             print("Exception in {}".format(module_name))
             raise
 
+    weeknotes = u'\n<hr>\n'.join(weeknotes_l)
+
     footer = basic_config.text_fields['footer']
 
     content_l = [intro, weeknotes, footer]
-    content = u'\n'.join(content_l)
+    content = u'\n<hr>\n'.join(content_l)
 
-    weeknotes = prettify_html(content)
 
-    return weeknotes
+    if not for_wordpress:
+        # Wordpress doesn't like pretty code, especially newlines
+        content = prettify_html(content)
+
+    return content
 
 if __name__ == "__main__":
     title = "Weeknotes {}-{}:CHANGEME".format(*date.today().isocalendar()[0:2])
-    content = generate_weeknotes()
+    content = generate_weeknotes(for_wordpress=True)
+    with open('/dev/shm/test.html','r+') as f:
+        f.write(content.encode("UTF-8"))
+
     post = build_draft_post(title, content)
     post_edit_url = "{baseurl}/wp-admin/post.php?post={id}&action=edit".format(
             baseurl = basic_config.config_keys['wordpress_baseurl'],

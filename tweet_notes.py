@@ -46,14 +46,20 @@ def get_notes_statuses():
 def make_html_embeddable(tweets):
     return map(lambda s: api.GetStatusOembed(s.GetId())['html'], tweets)
 
-def html_weeknotes():
-    header = '<div id="twitter"><h2>{}</h2>'.format(text_fields['twitter_header'])
-    content = "\n".join(make_html_embeddable(get_notes_statuses()))
-    footer = "These tweets are automatically selected from tweets from registered members who are listed in the @{}/{} twitter list using the #{} hashtag".format(usernames['twitter'], config_keys['twitter_list'], config_keys['weeknotes_str'])
+def make_url_list_text(tweets):
+    urls = []
+    for tweet in tweets:
+        tweet_d = tweet.AsDict()
+        urls.append("\nhttps://twitter.com/{}/status/{}\n".format(tweet_d['user']['screen_name'], tweet_d['id']))
 
-    return header+content+footer
+    return urls
+
+def html_weeknotes():
+    header = '<div id="tweet_notes"><h2>{}</h2>'.format(text_fields['twitter_header'])
+    content = "\n".join(make_url_list_text(get_notes_statuses()))
+    footer = "These tweets are automatically selected from tweets from registered members who are listed in the @{}/{} twitter list using the #{} hashtag</div>".format(usernames['twitter'], config_keys['twitter_list'], config_keys['weeknotes_str'])
+
+    return "\n".join([header,content,footer])
 
 if __name__ == '__main__':
     print html_weeknotes()
-
-
