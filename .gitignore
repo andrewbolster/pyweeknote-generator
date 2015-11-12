@@ -20,6 +20,9 @@ doc/
 # Python Junk
 *.pyc
 
+# Vim Junk
+*.swp
+
 # "local" files
 local_config.rb
 twitter_keys.rb

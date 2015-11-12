@@ -18,9 +18,11 @@ Pending:
     Facebook Integration?
     Slack Integration?
 """
-from BeautifulSoup import BeautifulSoup as bs
 
-#import basic_config
+from BeautifulSoup import BeautifulSoup as bs
+from datetime import date
+
+import basic_config
 #import secure_config
 import tweet_notes
 import jira_notes
@@ -31,10 +33,18 @@ def prettify_html(html):
 
 
 def generate_weeknotes():
+    header = "<div id='weeknotes'><h1>Weeknotes {}-{}</h1>".format(*date.today().isocalendar()[0:2])
+    intro = basic_config.text_fields['intro']
+    
     tweets = tweet_notes.html_weeknotes()
     jira = jira_notes.html_weeknotes()
 
-    weeknotes = prettify_html(tweets+jira)
+    footer = basic_config.text_fields['footer'] 
+
+    content_l = [header, intro, tweets, jira, footer]
+    content = u'\n'.join(content_l)
+
+    weeknotes = prettify_html(content)
     
     return weeknotes
 

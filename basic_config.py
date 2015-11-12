@@ -8,3 +8,21 @@ usernames = {'twitter':'FarsetLabs'}
 config_keys = {'twitter_list': 'members',
                'jira_baseurl': 'https://jira.farsetlabs.org.uk',
                'weeknotes_str':'weeknotes'}
+
+text_fields = {
+               'intro': "Each week we'll endeavour to publish some details of the interesting things that members have been up to over the past seven days.",
+               'footer': "Farset exists to support the community that uses it. If you use Farset Labs or attend events at the labs, then you are part of that community. If you would like to publicise something related to Farset, you can email info@farsetlabs.org.uk with the formatted content for us to use as a new blog post. Tell us what you're up to, and we'll show the world what madness happens at the Labs!",
+               'twitter_header': "Things of Note",
+               'jira_header' : "Done, Doing, Waiting"
+              }
+
+def cleanup_text_dict(d):
+    for k,v in d.items():
+        try:
+            d[k] = v.decode('utf-8', 'ignore')
+        except UnicodeDecodeError:
+            print("Borked on {}:{}".format(k,v))
+            raise
+
+cleanup_text_dict(text_fields)
+

@@ -15,7 +15,7 @@ import jira
 from collections import OrderedDict
 from cgi import escape
 
-from basic_config import usernames, config_keys
+from basic_config import usernames, config_keys, text_fields
 
 
 def format_issue(i):
@@ -25,7 +25,17 @@ def format_issue(i):
             'link' : i.permalink(),
             'status' : escape(i.fields.status.name)
     }
-    return """<li class="{status}"> <a href="{link}" title="{description}">{title}</a></li>""".format(**issue_details)
+
+    inner_string = issue_details['title']
+
+    if issue_details['status'] == "Closed":
+        inner_string = "<strike>{}</strike>".format(inner_string)
+
+    issue_details['inner_string'] = inner_string
+
+    content = """<li class="{status}"><a href="{link}" title="{description}">{inner_string}</a></li>""".format(**issue_details)
+    
+    return content
 
 
 def format_issue_group(issues, title="Issues"):
@@ -57,7 +67,7 @@ titles = [
 ]
 
 def html_weeknotes():
-    header = '<div id="JIRA"><h2>JIRA Issues</h2>'
+    header = '<div id="jira"><h2>{}</h2>'.format(text_fields['jira_header'])
     content = ""
     footer = "</div>"
 
