@@ -62,7 +62,7 @@ def generate_weeknotes(for_wordpress=False):
 if __name__ == "__main__":
     title = "Weeknotes {}-{}:CHANGEME".format(*date.today().isocalendar()[0:2])
     content = generate_weeknotes(for_wordpress=True)
-    with open('/dev/shm/test.html','r+') as f:
+    with open('sample_output.html','r+') as f:
         f.write(content.encode("UTF-8"))
 
     post = build_draft_post(title, content)

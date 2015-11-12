@@ -24,6 +24,4 @@ doc/
 *.swp
 
 # "local" files
-local_config.rb
-twitter_keys.rb
 secure_config.py
