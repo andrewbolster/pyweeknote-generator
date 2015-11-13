@@ -10,20 +10,19 @@
 Jira integration for Weeknotes
 """
 
-import jira
-
-from collections import OrderedDict
 from cgi import escape
 
-from basic_config import usernames, config_keys, text_fields
+import jira
+
+from basic_config import config_keys, text_fields
 
 
 def format_issue(i):
     issue_details = {
-            'title' : escape(i.fields.summary),
-            'description' : escape(i.fields.description),
-            'link' : i.permalink(),
-            'status' : escape(i.fields.status.name)
+        'title': escape(i.fields.summary),
+        'description': escape(i.fields.description),
+        'link': i.permalink(),
+        'status': escape(i.fields.status.name)
     }
 
     inner_string = issue_details['title']
@@ -33,8 +32,9 @@ def format_issue(i):
 
     issue_details['inner_string'] = inner_string
 
-    content = """<li class="{status}"><a href="{link}" title="{description}">{inner_string}</a></li>""".format(**issue_details)
-    
+    content = """<li class="{status}"><a href="{link}" title="{description}">{inner_string}</a></li>""".format(
+        **issue_details)
+
     return content
 
 
@@ -44,15 +44,17 @@ def format_issue_group(issues, title="Issues"):
     footer = "</ul>"
     content = ""
     for issue_html in formatted_issues:
-        content+=issue_html
-    return header+content+footer
+        content += issue_html
+    return header + content + footer
 
-api = jira.JIRA(config_keys['jira_baseurl'], options={'verify':False})
+
+api = jira.JIRA(config_keys['jira_baseurl'], options={'verify': False})
 
 # Currently one cares about public issues anyway, so no authentication needed
 
 closed_issues = api.search_issues("status changed to Closed after -1w")
-changed_issues = api.search_issues('status changed to ("In Progress", Reopened, "To Do", "Waiting for Support", "Waiting for Customer", "Waiting for Review") after -1w')
+changed_issues = api.search_issues(
+    'status changed to ("In Progress", Reopened, "To Do", "Waiting for Support", "Waiting for Customer", "Waiting for Review") after -1w')
 waiting_issues = api.search_issues('status in ("Waiting for Support", "Waiting for Customer", "Waiting for Review")')
 
 issues = [
@@ -66,14 +68,15 @@ titles = [
     "Waiting Issues"
 ]
 
+
 def html_weeknotes():
     header = '<div id="jira"><h2>{}</h2>'.format(text_fields['jira_header'])
     content = ""
     footer = "</div>"
 
     content += header
-    for _issues,_title in zip(issues, titles):
-        content+= format_issue_group(_issues, title=_title)
+    for _issues, _title in zip(issues, titles):
+        content += format_issue_group(_issues, title=_title)
     content += footer
 
     return content

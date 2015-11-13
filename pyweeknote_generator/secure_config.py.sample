@@ -12,12 +12,12 @@ Secure Config Sample: Change this file to secure_config.py to get started
 
 # Twitter API
 
-twitter_keys={'consumer_key':'',
-              'consumer_secret':'',
-              'access_token_key':'',
-              'access_token_secret':''}
+twitter_keys = {'consumer_key': '',
+                'consumer_secret': '',
+                'access_token_key': '',
+                'access_token_secret': ''}
 
 # Google APIs Service Account 
 
-google_api_service_account_keys={'client_email':'',
-                                 'private_key':''}
+google_api_service_account_keys = {'client_email': '',
+                                   'private_key': ''}

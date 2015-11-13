@@ -10,13 +10,13 @@
 Post Draft Blog post to Wordpress using the XML-RPC API
 """
 
+from wordpress_xmlrpc import Client, WordPressPost
+from wordpress_xmlrpc.methods import posts
+
 from basic_config import config_keys
 from secure_config import wordpress_keys
 
-from wordpress_xmlrpc import Client, WordPressPost
-from wordpress_xmlrpc.methods import posts, users
-
-wp = Client(config_keys['wordpress_baseurl']+'xmlrpc.php', wordpress_keys['username'], wordpress_keys['password'])
+wp = Client(config_keys['wordpress_baseurl'] + 'xmlrpc.php', wordpress_keys['username'], wordpress_keys['password'])
 
 
 def build_draft_post(title, content):
@@ -39,4 +39,3 @@ def build_draft_post(title, content):
     else:
         post.id = wp.call(posts.NewPost(post))
     return post
-

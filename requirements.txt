@@ -1,0 +1,5 @@
+python-twitter
+BeautifulSoup
+google-api-python-client
+jira
+python-wordpress-xmlrpc

@@ -19,6 +19,7 @@ doc/
 
 # Python Junk
 *.pyc
+*.egg-info
 
 # Vim Junk
 *.swp
