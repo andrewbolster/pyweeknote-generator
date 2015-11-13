@@ -5,4 +5,4 @@ Collects reports of #weeknotes, recent JIRA activity and collates them into a wo
 
 Fully configurable from the `basic_config.py` and `secure_config.py` files (see `secure_config_sample.py`)
 
-
+![](sample_blog.png)
