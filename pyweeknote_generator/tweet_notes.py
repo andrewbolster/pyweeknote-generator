@@ -13,6 +13,7 @@ Twitter Integrations for Weeknotes
 from datetime import date, timedelta
 
 import twitter
+
 from dateutil import parser
 
 from basic_config import usernames, config_keys, text_fields
@@ -23,7 +24,7 @@ api = twitter.Api(**twitter_keys)
 user = api.VerifyCredentials()
 
 
-def GetListTimelineSinceDate(list_id, target_date, slug=''):
+def get_list_timeline_since_date(list_id, target_date):
     _statuses = []
     last_date = date.today()
     last_id = None
@@ -45,7 +46,7 @@ def get_notes_statuses():
     relevant_list = relevant_lists[0]
 
     tweet_notes = filter(lambda s: '#{}'.format(config_keys['weeknotes_str']) in s.text,
-                         GetListTimelineSinceDate(relevant_list.GetId(), date.today() - timedelta(days=7)))
+                         get_list_timeline_since_date(relevant_list.GetId(), date.today() - timedelta(days=7)))
     return tweet_notes
 
 

@@ -28,10 +28,11 @@ import subprocess
 import warnings
 import traceback
 import importlib
-from BeautifulSoup import BeautifulSoup as bs
+from BeautifulSoup import BeautifulSoup as BS
 
 import basic_config
 from post_to_wordpress import build_draft_post
+from slack_notify import notify as notify_slack
 
 
 def try_to_open(filename):
@@ -40,12 +41,12 @@ def try_to_open(filename):
             subprocess.call(["xdg-open", filename])
         else:
             os.startfile(filename)
-    except Exception as err:
+    except Exception:
         warnings.warn(traceback.format_exc())
 
 
 def prettify_html(html):
-    return bs(html).prettify()
+    return BS(html).prettify()
 
 
 def generate_weeknotes(for_wordpress=False):
@@ -54,7 +55,7 @@ def generate_weeknotes(for_wordpress=False):
     weeknotes_l = []
     for module_name in basic_config.modules:
         try:
-            module = importlib.import_module('.'+module_name, package='pyweeknote_generator')
+            module = importlib.import_module('.' + module_name, package='pyweeknote_generator')
             weeknotes_l.append(module.html_weeknotes())
         except ImportError:
             warnings.warn("Could not import {}; skipping".format(module_name))
@@ -94,6 +95,8 @@ def main():
     parser.add_argument('-p', "--publish", action='store_true', help="Publish notes", default=False)
     parser.add_argument('-o', "--open", action='store_true', help="Attempt to launch generated outputs", default=False)
     parser.add_argument('-t', "--title", action='store', help="Set title afterword", default="CHANGEME")
+    parser.add_argument('-n', "--notify", action='store_true',
+                        help="Notify relevant outputs (Slack) that a post is ready", default=False)
 
     args = parser.parse_args()
 
@@ -111,3 +114,6 @@ def main():
         print("HTML Content dumped to sample_output.html")
     if args.open:
         map(try_to_open, outputs)
+
+    if args.notify:
+        notify_slack("Draft {} available at {}".format(title, ",".join(outputs)))

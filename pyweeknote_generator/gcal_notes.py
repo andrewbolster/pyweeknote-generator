@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 import httplib2
 from dateutil import parser
 from apiclient import discovery
+
 from oauth2client import client
 
 from basic_config import config_keys
@@ -37,10 +38,10 @@ later = (datetime.utcnow() + timedelta(
 
 
 def get_events_between(now=now, later=later):
-    eventsResult = api.events().list(
+    events = api.events().list(
         calendarId=config_keys['google_calendar_id'], timeMin=now, timeMax=later, maxResults=10, singleEvents=True,
         orderBy='startTime').execute()
-    return eventsResult.get('items', [])
+    return events.get('items', [])
 
 
 def html_format_event(event):

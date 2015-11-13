@@ -16,7 +16,7 @@ from wordpress_xmlrpc.methods import posts
 from basic_config import config_keys
 from secure_config import wordpress_keys
 
-wp = Client(config_keys['wordpress_baseurl'] + 'xmlrpc.php', wordpress_keys['username'], wordpress_keys['password'])
+wp = Client(config_keys['wordpress_baseurl'] + '/xmlrpc.php', wordpress_keys['username'], wordpress_keys['password'])
 
 
 def build_draft_post(title, content):
