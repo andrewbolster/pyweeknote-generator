@@ -13,8 +13,9 @@ Includes:
     Twitter #weeknotes hashtag
     Public JIRA tasks opened or marked as complete this week
     Calendar Integration
-Pending:
     Wordpress Integration
+
+Pending:
     Instagram Integration?
     Facebook Integration?
     Slack Integration?
@@ -108,7 +109,7 @@ def main():
     if args.publish:
         outputs.extend(generate_and_post_draft_to_wordpress(title, content)['outputs'])
     else:
-        with open('sample_output.html', 'r+') as f:
+        with open('sample_output.html', 'w') as f:
             f.write(content.encode("UTF-8"))
         outputs.append("sample_output.html")
         print("HTML Content dumped to sample_output.html")
@@ -117,3 +118,6 @@ def main():
 
     if args.notify:
         notify_slack("Draft {} available at {}".format(title, ",".join(outputs)))
+
+if __name__ == "__main__":
+    main()

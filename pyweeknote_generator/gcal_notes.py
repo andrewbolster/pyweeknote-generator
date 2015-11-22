@@ -64,7 +64,7 @@ def html_format_event(event):
         edate = edate.date()
 
     title = event['summary']
-    description = event['description'].encode('utf-8')
+    description = event.get('description', "").encode('utf-8')
     links = re.findall('link:(.*)', description)
 
     if len(links) > 0:
@@ -96,7 +96,10 @@ def html_format_events(events):
         footer = "</table>" + footer
 
     for event in events:
-        content += html_format_event(event)
+        try:
+            content += html_format_event(event)
+        except KeyError:
+            raise
 
     return (header + content + footer).decode("utf8")
 
