@@ -13,7 +13,7 @@ Pythonic ish Version of the DoES Liverpool-based Weeknotes generator (for Farset
 from setuptools import setup
 from pip.req import parse_requirements
 
-install_reqs = parse_requirements('requirements.txt')
+install_reqs = parse_requirements('requirements.txt', session=False)
 reqs = [str(ir.req) for ir in install_reqs]
 
 setup(name='pyweeknote-generator',
